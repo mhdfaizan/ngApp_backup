@@ -1,0 +1,24 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+  <!-- <i class="fa fa-circle-o-notch fa-spin fa-lg"></i> -->
+  <i class="fa fa-wpforms fa-lg" aria-hidden="true"></i>
+  &nbsp;&nbsp;
+  <a class="navbar-brand" href="#">Modern Taxation System</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="justify-content-end collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" routerLink="profiles" routerLinkActive="active">Profiles</a>
+      <a class="nav-item nav-link" routerLink="features" routerLinkActive="active">Features</a>
+      <a class="nav-item nav-link" routerLink="results" routerLinkActive="active">Results</a>
+      <a class="nav-item nav-link" routerLink="login" routerLinkActive="active">Login</a>
+      <a class="nav-item nav-link" style="cursor: pointer;" *ngIf="userCheck()" (click)="logout()">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<ng-http-loader [backgroundColor]="'#0F7989'" [spinner]="spinkit.skWave" [minDuration]="1000">
+</ng-http-loader>
+<router-outlet></router-outlet>

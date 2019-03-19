@@ -1,0 +1,24 @@
+.result-page-font {
+  font-size: 80%;
+  padding-right: 15px;
+}
+
+/* .result-tree-wrapper {
+  max-height: 200px;
+} */
+
+.result-tree-wrapper {
+  max-height: 400px;
+  /* overflow-x: auto; */
+}
+
+:host ::ng-deep .result-tree-font {
+  font-size: 70%;
+  max-height: 400px;
+  max-width: 98%;
+  overflow: auto;
+}
+
+:host ::ng-deep .result-table-settings {
+  font-size: 90%;  
+}

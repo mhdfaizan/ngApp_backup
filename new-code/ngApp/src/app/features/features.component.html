@@ -1,0 +1,172 @@
+<div class="row pb-3">
+  <div class="col-2 pl-3 pt-3 border-right">
+    <div class="border-bottom">
+      <div class="mb-3">
+        <select class="custom-select custom-select-sm" [(ngModel)]="selectedFileType" required>
+          <option value="">Select File Type</option>
+          <option *ngFor="let fileType of fileTypes" [value]="fileType">
+            {{fileType}}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <select class="custom-select custom-select-sm" [(ngModel)]="selectedAsstYear" required>
+          <option value="">Select Assessment Year</option>
+          <option *ngFor="let assessmentYear of assessmentYears" [value]="assessmentYear">
+            {{assessmentYear}}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <select class="custom-select custom-select-sm" [(ngModel)]="selectedBranchCode">
+          <option value="">Branch Code (All)</option>
+          <option *ngFor="let branchCode of branchCodes" [value]="branchCode">
+            {{branchCode}}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <select class="custom-select custom-select-sm" [(ngModel)]="selectedBusinessCode">
+          <option value="">Business Code (All)</option>
+          <option *ngFor="let businessCode of businessCodes" [value]="businessCode">
+            {{businessCode}}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <select class="custom-select custom-select-sm" [(ngModel)]="selectedStateCode">
+          <option value="">State Code (All)</option>
+          <option *ngFor="let stateCode of stateCodes" [value]="stateCode">
+            {{stateCode}}
+          </option>
+        </select>
+      </div>
+      <div class="text-right pb-3">
+        <button type="button" class="btn btn-info btn-sm btn-block" (click)="displaySelectModel()"><i class="fa fa-search">&nbsp;&nbsp;</i>Get
+          Models</button>
+      </div>
+    </div>
+    <div *ngIf="showSelectModel" class="pt-2 border-top">
+      <!-- <div class="feature-info-font text-center" style="font-weight: 600">
+        Models
+      </div> -->
+      <div *ngIf="selectedModel" class="selected-model-font text-center" style="font-weight: 600">
+        Model :
+        <span class="text-primary">
+          {{selectedModel.name}}
+        </span>
+      </div>
+      <div class="mt-2 overflow-auto model-selection-wrapper">
+        <p-listbox [style]="{'width':'100%', 'font-size': '90%'}" [options]="models" [(ngModel)]="selectedModel"
+          optionLabel="name" filter="filter" (onChange)="getFeaturesForModel(selectedModel)"></p-listbox>
+      </div>
+    </div>
+  </div>
+  <div class="col-7 pt-3 border-right border-left ">
+    <div class="feature-wrapper overflow-auto">
+      <div class="row flex-row flex-nowrap">
+        <div class="mr-1 col-md-4" *ngFor="let item of groupedFeaturesList">
+          <div class="card">
+            <h6 class="card-header text-center">{{item.name}}</h6>
+            <div class="card-body">
+              <div class="box card cursor-pointer border-info" (click)="showFeatureFilters(feature)" *ngFor="let feature of item.values">
+                <div class="card-text border-bottom">
+                  <span>
+                    {{feature.FeatureName}}
+                  </span>
+                  <br />
+                </div>
+                <div>
+                  <span class="feature-info-font">
+                    {{feature.FeatureDescription}}
+                    <span *ngIf="feature.Filters[0].Type != ''" class="badge badge-success">F</span>
+                  </span>
+                </div>
+                <!-- FOR FEATURE METADATA (ALPHA, BASE, ETC.) -->
+                <!-- <div class="card-text feature-info-font">
+                  <span class="badge badge-light">R</span>
+                  &nbsp;
+                  <span class="badge badge-info">A</span>
+                  &nbsp;
+                  <span class="badge badge-info">B</span>
+                  &nbsp;
+                  <span class="badge badge-light">C</span>
+                  &nbsp;
+                  <span class="badge badge-light">D</span>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-3 pt-3 border-left feature-info-font">
+    <div class="mb-3">
+      <input [(ngModel)]="profileName" placeholder="Profile Name" type="text" class="form-control form-control-sm rounded-1">
+    </div>
+    <div class="text-center border-bottom pb-3">
+      <button type="button" [disabled]="!(profileName != '')" (click)="createProfile()" class="btn btn-success btn-sm btn-block"><i
+          class="fa fa-cogs">&nbsp;&nbsp;</i>Run
+        Model</button>
+    </div>
+    <div *ngIf="showFeatureDetail" class="border-top pt-3 feature-info-wrapper overflow-auto">
+      <table class="table table-striped table-bordered">
+        <tr>
+          <th scope="row">ID</th>
+          <td>{{featureForDetail.FeatureID}}</td>
+        </tr>
+        <tr>
+          <th scope="row">Name</th>
+          <td>{{featureForDetail.FeatureName}}</td>
+        </tr>
+        <tr>
+          <th scope="row">Description</th>
+          <td>{{featureForDetail.FeatureDescription}}</td>
+        </tr>
+        <tr>
+          <th scope="row">Group</th>
+          <td>{{featureForDetail.FeatureGroup}}</td>
+        </tr>
+        <tr>
+          <th scope="row">Filter Operator</th>
+          <td>
+            <select class="custom-select custom-select-sm" [(ngModel)]="selectedFilter">
+              <option value="">Select Filter</option>
+              <option value="Greater">GREATER</option>
+              <option value="Less">LESS</option>
+              <option value="Equal">EQUAL</option>
+              <option value="Between">BETWEEN</option>
+              <option value="Greater">GREATER</option>
+              <option value="IS NULL">IS NULL</option>
+              <option value="IS NOT NULL">IS NOT NULL</option>
+              <option value="Contains">CONTAINS</option>
+              <option value="Greater than Equal to">GREATE THAN EQUAL TO</option>
+              <option value="Less than than Equal to">LESS THAN EQUAL TO</option>
+              <option value="Not Equal">NOT EQUAL</option>
+              <option value="Like">LIKE</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Filter Value</th>
+          <td class="input-group input-group-sm">
+            <input type="number" class="form-control" placeholder="Value One" [(ngModel)]="valueOne" [disabled]="selectedFilter == '' || selectedFilter == 'IS NULL' || selectedFilter == 'IS NOT NULL'">
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Filter Value</th>
+          <td class="input-group input-group-sm">
+            <input type="number" class="form-control" placeholder="Value Two" [(ngModel)]="valueTwo" [disabled]="selectedFilter != 'Between'">
+          </td>
+        </tr>
+        <tr class="text-center">
+          <td colspan="2">
+            <button type="button" [disabled]="checkDisable()" class="btn btn-info btn-sm btn-block" (click)="saveFilter(featureForDetail.FeatureID)"><i
+                class="fa fa-filter">&nbsp;&nbsp;</i>Save Filter</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

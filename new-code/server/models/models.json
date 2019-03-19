@@ -1,0 +1,26 @@
+[{
+        "ModelID": 1,
+        "ModelName": "Model (GPNP3 & GPRATIO)",
+        "Features": null
+    },
+    {
+        "ModelID": 2,
+        "ModelName": "Model (OV_DIR)",
+        "Features": null
+    },
+    {
+        "ModelID": 3,
+        "ModelName": "Model (GPNP & EXPTAX)",
+        "Features": null
+    },
+    {
+        "ModelID": 4,
+        "ModelName": "Model (INDNORM)",
+        "Features": null
+    },
+    {
+        "ModelID": 5,
+        "ModelName": "Model (DIRLOINT)",
+        "Features": null
+    }
+]

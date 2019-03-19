@@ -1,0 +1,24 @@
+.profile-wrapper {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(7, 12%);
+  max-height: 545px;
+}
+
+.box {
+  padding: 5px 15px 5px 15px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.profile-info-font {
+  font-size: 70%;
+}
+
+.profile-info-wrapper{
+  max-height: 495px;
+}

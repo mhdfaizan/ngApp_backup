@@ -1,0 +1,36 @@
+.feature-wrapper {
+  /* display: grid; */
+  /* grid-gap: 20px; */
+  /* grid-template-columns: repeat(7, 12%); */
+  max-height: 545px;
+  font-size: 90%;
+  /* max-width: 1000px; */
+}
+
+.model-selection-wrapper {
+  max-height: 210px;
+  font-size: 80%;
+}
+
+.feature-info-wrapper {
+  max-height: 495px;
+}
+
+.box {
+  padding: 5px 15px 5px 15px;
+  margin: 0px 0px 10px 0px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.feature-info-font {
+  font-size: 70%;
+}
+
+.selected-model-font {
+  font-size: 70%;
+}

@@ -1,0 +1,141 @@
+{
+    "taxpayer1": [{
+            "taxpayer_id": "23156498",
+            "group": "values"
+        },
+        {
+            "feature_one": "879",
+            "group": "values"
+        },
+        {
+            "feature_one_score": "78.5",
+            "group": "scores"
+        },
+        {
+            "feature_one_rank": "2",
+            "group": "ranks"
+        },
+        {
+            "feature_one_year_one": "888",
+            "group": "values"
+        },
+        {
+            "feature_one_year_two": "850",
+            "group": "values"
+        },
+        {
+            "feature_two": "899",
+            "group": "values"
+        },
+        {
+            "feature_two_score": "79.5",
+            "group": "scores"
+        },
+        {
+            "feature_two_rank": "23",
+            "group": "ranks"
+        },
+        {
+            "feature_two_year_one": "123888",
+            "group": "values"
+        },
+        {
+            "feature_two_year_two": "123850",
+            "group": "values"
+        },
+        {
+            "feature_three": "324879",
+            "group": "values"
+        },
+        {
+            "feature_three_score": "799",
+            "group": "scores"
+        },
+        {
+            "feature_three_rank": "35",
+            "group": "ranks"
+        },
+        {
+            "feature_three_year_one": "188",
+            "group": "values"
+        },
+        {
+            "feature_three_year_two": "150",
+            "group": "values"
+        },
+        {
+            "year": "2018",
+            "group": "values"
+        }
+    ],
+    "taxpayer2": [{
+            "taxpayer_id": "787451312",
+            "group": "values"
+        },
+        {
+            "feature_one": "89",
+            "group": "values"
+        },
+        {
+            "feature_one_score": "78.5",
+            "group": "scores"
+        },
+        {
+            "feature_one_rank": "2",
+            "group": "ranks"
+        },
+        {
+            "feature_one_year_one": "888",
+            "group": "values"
+        },
+        {
+            "feature_one_year_two": "850",
+            "group": "values"
+        },
+        {
+            "feature_two": "8733",
+            "group": "values"
+        },
+        {
+            "feature_two_score": "79.5",
+            "group": "scores"
+        },
+        {
+            "feature_two_rank": "23",
+            "group": "ranks"
+        },
+        {
+            "feature_two_year_one": "123888",
+            "group": "values"
+        },
+        {
+            "feature_two_year_two": "123850",
+            "group": "values"
+        },
+        {
+            "feature_three": "249",
+            "group": "values"
+        },
+        {
+            "feature_three_score": "799",
+            "group": "scores"
+        },
+        {
+            "feature_three_rank": "35",
+            "group": "ranks"
+        },
+        {
+            "feature_three_year_one": "188",
+            "group": "values"
+        },
+        {
+            "feature_three_year_two": "150",
+            "group": "values"
+        },
+        {
+            "year": "2018",
+            "group": "values"
+        }
+    ]
+}
+

@@ -1,0 +1,92 @@
+<div class="row pb-3">
+  <div class="col-2 pl-3 pt-3 border-right">
+    <div class="text-center border-bottom pb-3">
+      <button type="button" data-toggle="modal" data-target="#reportModal" data-backdrop="static"
+      data-keyboard="false" class="btn btn-info btn-sm btn-block"><i class="fa fa-list-alt">&nbsp;&nbsp;</i>Show
+        Summary</button>
+    </div>
+    <div class="border-top pt-3">
+      <p-tree styleClass="result-tree-font" [value]="treeData" selectionMode="checkbox" [(selection)]="selectedColumns"
+        (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeSelect($event)">
+      </p-tree>
+    </div>
+  </div>
+  <div *ngIf="cols.length != 0" class="col-10 pt-3 result-page-font overflow-auto border-left ">
+    <p-table #dt [columns]="cols" [value]="cars" [paginator]="true" [rows]="5" [globalFilterFields]="filterFields"
+      styleClass="result-table-settings" [autoLayout]="true" [style]="{'overflow':'auto!important'}" selectionMode="single">
+      <ng-template pTemplate="caption">
+        <div style="text-align: right">
+          <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+          <input type="text" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')"
+            style="width:auto">
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th *ngFor="let col of cols" [pSortableColumn]="col.label">
+            {{col.label}}
+            <p-sortIcon [field]="col.label"></p-sortIcon>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-car>
+        <tr>
+          <td *ngFor="let col of cols" (click)="printRow(car)">
+            {{car[col.label]}}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<div class="modal fade" id="reportModal">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-info">
+          <h5 class="modal-title">Summary</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <table style="overflow: auto; max-height: 400px;" class="table-responsive table table-hover">
+              <thead>
+                <tr class="bg-light">
+                  <th column="col" scope="col" *ngFor="let col of statisticsHeaders">
+                    {{col}}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let statRow of statistics" data-toggle="modal">
+                  <td *ngFor="let col of statisticsHeaders">{{statRow[col]}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer border-info">
+          <button type="button" class="btn btn-outline-info" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- OLD TABLE -->
+<!-- <table datatable [dtOptions]="dtOptions" class="row-border hover table-bordered">
+      <thead>
+        <tr>
+          <th sortable-column="col.label" scope="col.label" *ngFor="let col of displayColumns">
+            {{col.label}}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let resultRow of resultSet" (click)="showReportCard(resultRow)">
+          <td *ngFor="let col of displayColumns">
+            {{resultRow[col.label]}}
+          </td>
+        </tr>
+      </tbody>
+    </table> -->

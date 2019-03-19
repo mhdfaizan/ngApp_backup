@@ -1,0 +1,393 @@
+[{
+        "FeatureID": 2,
+        "FeatureName": "total_assets",
+        "FeatureDescription": "Total Assets",
+        "FeatureGroup": "ASSETS",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 3,
+        "FeatureName": "trade_debtors",
+        "FeatureDescription": "Trade Debtors",
+        "FeatureGroup": "ASSETS",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 10,
+        "FeatureName": "cost_of_goods_sold",
+        "FeatureDescription": "Cost of Sales or Cost of Goods Sold",
+        "FeatureGroup": "EXPENSE",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 11,
+        "FeatureName": "contract_subcon_expense",
+        "FeatureDescription": "Contractor and Subcontractor Expense",
+        "FeatureGroup": "INTERCOMPANY",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 12,
+        "FeatureName": "loan_interest_expense",
+        "FeatureDescription": "Loan Interest Expense",
+        "FeatureGroup": "INTERCOMPANY",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 13,
+        "FeatureName": "non_allow_expense",
+        "FeatureDescription": "Non-allowable expenses",
+        "FeatureGroup": "INTERCOMPANY",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 14,
+        "FeatureName": "purchases",
+        "FeatureDescription": "Purchases",
+        "FeatureGroup": "EXPENSE",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 15,
+        "FeatureName": "total_expenses",
+        "FeatureDescription": "Total Business Expense",
+        "FeatureGroup": "EXPENSE",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 16,
+        "FeatureName": "opening_stock",
+        "FeatureDescription": "Opening Stock",
+        "FeatureGroup": "EXPENSE",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 18,
+        "FeatureName": "gross_profit",
+        "FeatureDescription": "Gross Profit or Loss",
+        "FeatureGroup": "INCOME",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 20,
+        "FeatureName": "net_profit_or_loss",
+        "FeatureDescription": "Net Profit or Loss",
+        "FeatureGroup": "INCOME",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 21,
+        "FeatureName": "other_business_income",
+        "FeatureDescription": "Other Business Income",
+        "FeatureGroup": "INCOME",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 29,
+        "FeatureName": "other_non_sales_income",
+        "FeatureDescription": "Other non Business Income",
+        "FeatureGroup": "INCOME",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 22,
+        "FeatureName": "closing_stock",
+        "FeatureDescription": "Closing Stock",
+        "FeatureGroup": "INCOME",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 19,
+        "FeatureName": "gross_sales",
+        "FeatureDescription": "Gross Sales",
+        "FeatureGroup": "INCOME",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 25,
+        "FeatureName": "other_creditors",
+        "FeatureDescription": "Other Creditors",
+        "FeatureGroup": "LIABILITY",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 23,
+        "FeatureName": "trade_creditors",
+        "FeatureDescription": "Trade Creditors",
+        "FeatureGroup": "LIABILITY",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 32,
+        "FeatureName": "tax_exempted_income",
+        "FeatureDescription": "Non-taxable profits",
+        "FeatureGroup": "INCOME",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 37,
+        "FeatureName": "stocks",
+        "FeatureDescription": "Stocks",
+        "FeatureGroup": "ASSETS",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 38,
+        "FeatureName": "cap_fund_adv",
+        "FeatureDescription": "Advances",
+        "FeatureGroup": "LIABILITY",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 39,
+        "FeatureName": "cap_fund_withdrawal",
+        "FeatureDescription": "Drawings",
+        "FeatureGroup": "LIABILITY",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 26,
+        "FeatureName": "total_tax",
+        "FeatureDescription": "Tax",
+        "FeatureGroup": "LIABILITY",
+        "FeatureDataType": "numeric",
+        "TableName": "tax_assm_fact_ods"
+    },
+    {
+        "FeatureID": 28,
+        "FeatureName": "tax_payable_repayable",
+        "FeatureDescription": "Total Tax Liability",
+        "FeatureGroup": "LIABILITY",
+        "FeatureDataType": "numeric",
+        "TableName": "tax_assm_fact_ods"
+    },
+    {
+        "FeatureID": 40,
+        "FeatureName": "bad_debt",
+        "FeatureDescription": "Bad Debt",
+        "FeatureGroup": "EXPENSE",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 41,
+        "FeatureName": "salary_and_wages",
+        "FeatureDescription": "Employment Income (salary and wages)",
+        "FeatureGroup": "INFORMATIONAL",
+        "FeatureDataType": "numeric",
+        "TableName": "income_fact_ods"
+    },
+    {
+        "FeatureID": 42,
+        "FeatureName": "cash_in_hand",
+        "FeatureDescription": "Cash balance in hand and in bank",
+        "FeatureGroup": "ASSET_RT",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 43,
+        "FeatureName": "cash_in_bank",
+        "FeatureDescription": "Cash balance in hand and in bank",
+        "FeatureGroup": "ASSET_RT",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 44,
+        "FeatureName": "total_investment",
+        "FeatureDescription": "Investments",
+        "FeatureGroup": "ASSET_RT",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 45,
+        "FeatureName": "other_debtors",
+        "FeatureDescription": "Other Debtors",
+        "FeatureGroup": "ASSET_RT",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 46,
+        "FeatureName": "total_fixed_assets",
+        "FeatureDescription": "Total Fixed Assets",
+        "FeatureGroup": "ASSET_RT",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 47,
+        "FeatureName": "commission_expense",
+        "FeatureDescription": "Commissions Expense",
+        "FeatureGroup": "EXPENSE",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 48,
+        "FeatureName": "other_expenses",
+        "FeatureDescription": "Other Business Expense",
+        "FeatureGroup": "EXPENSE",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 49,
+        "FeatureName": "interest_business_income",
+        "FeatureDescription": "Interest Income",
+        "FeatureGroup": "EXT_INCOME",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 50,
+        "FeatureName": "std_paid",
+        "FeatureDescription": "Tax paid",
+        "FeatureGroup": "TAX",
+        "FeatureDataType": "numeric",
+        "TableName": "tax_assm_fact_ods"
+    },
+    {
+        "FeatureID": 51,
+        "FeatureName": "std_from_spouse",
+        "FeatureDescription": "Tax paid",
+        "FeatureGroup": "TAX",
+        "FeatureDataType": "numeric",
+        "TableName": "tax_assm_fact_ods"
+    },
+    {
+        "FeatureID": 52,
+        "FeatureName": "chargeable_income",
+        "FeatureDescription": "Chargeable Income",
+        "FeatureGroup": "TAX",
+        "FeatureDataType": "numeric",
+        "TableName": "tax_assm_fact_ods"
+    },
+    {
+        "FeatureID": 62,
+        "FeatureName": "state",
+        "FeatureDescription": "State Code",
+        "FeatureGroup": "CODE",
+        "FeatureDataType": "string",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 63,
+        "FeatureName": "assessment_type",
+        "FeatureDescription": "Assessment type",
+        "FeatureGroup": "DIMENSION",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 64,
+        "FeatureName": "assessment_year",
+        "FeatureDescription": "Assessment year",
+        "FeatureGroup": "DIMENSION",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 65,
+        "FeatureName": "assessment_key",
+        "FeatureDescription": "Assessment key",
+        "FeatureGroup": "DIMENSION",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 66,
+        "FeatureName": "branch_code",
+        "FeatureDescription": "Branch code",
+        "FeatureGroup": "DIMENSION",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 67,
+        "FeatureName": "branch_key",
+        "FeatureDescription": "Branch key",
+        "FeatureGroup": "DIMENSION",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 68,
+        "FeatureName": "taxpayer_key",
+        "FeatureDescription": "Tax payer key",
+        "FeatureGroup": "DIMENSION",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 69,
+        "FeatureName": "business_key",
+        "FeatureDescription": "Business key",
+        "FeatureGroup": "DIMENSION",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 70,
+        "FeatureName": "business_code",
+        "FeatureDescription": "Business code",
+        "FeatureGroup": "DIMENSION",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 71,
+        "FeatureName": "it_ref_no_taxassm_dim",
+        "FeatureDescription": "It ref no",
+        "FeatureGroup": "DIMENSION",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 72,
+        "FeatureName": "seq_no",
+        "FeatureDescription": "Sequence no",
+        "FeatureGroup": "DIMENSION",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 73,
+        "FeatureName": "process_date",
+        "FeatureDescription": "Process date",
+        "FeatureGroup": "DIMENSION",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    },
+    {
+        "FeatureID": 74,
+        "FeatureName": "snapshot_date",
+        "FeatureDescription": "Snap shot date",
+        "FeatureGroup": "DIMENSION",
+        "FeatureDataType": "numeric",
+        "TableName": "financialfact_ods"
+    }
+]

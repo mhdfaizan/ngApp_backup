@@ -1,0 +1,44 @@
+{
+  "Transposed": [
+    {
+      "taxpayer": "1",
+      "assessment_year": "2018",
+      "a_val": "1",
+      "a_score": "4",
+      "a_rank": "1",
+      "b_val": "2",
+      "b_score": "2",
+      "b_rank": "2"
+    },
+    {
+      "taxpayer": "2",
+      "assessment_year": "2018",
+      "a_val": "3",
+      "a_score": "2",
+      "a_rank": "3",
+      "b_val": "4",
+      "b_score": "1",
+      "b_rank": "4"
+    }
+  ],
+  "Statistics": [
+    {
+      "feature": "a",
+      "mean": 1.0,
+      "median": 1.0,
+      "mode": 2.0,
+      "standard_deviation": 2.0,
+      "max_value": 1.0,
+      "min_value": 4.0
+    },
+    {
+      "feature": "b",
+      "mean": 4.0,
+      "median": 2.0,
+      "mode": 3.0,
+      "standard_deviation": 1.0,
+      "max_value": 2.0,
+      "min_value": 4.0
+    }
+  ]
+}
