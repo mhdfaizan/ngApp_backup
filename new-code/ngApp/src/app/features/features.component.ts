@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ServiceInvokerComponent } from '../service-invoker/service-invoker.component';
 import { ApiUrls } from '../api-urls';
 import { Router } from '@angular/router';
+import { getQueryPredicate } from '@angular/compiler/src/render3/view/util';
+import { DataSharingService } from '../data-sharing.service';
 
 @Component({
   selector: 'app-features',
@@ -29,19 +31,58 @@ export class FeaturesComponent implements OnInit {
   selectedBusinessCode = "";
   selectedStateCode = "";
   selectedAsstYear = "";
-  selectedModel: any = {};
+  selectedModelName: string = "";
+  selectedModelId = "";
 
   selectedFilter = "";
   valueOne = "";
   valueTwo = "";
   disableSaveFilter = true;
 
+  countMessage = "";
+  countCheck = "";
+  displayCountModal = "none";
 
-  constructor(private _serviceInvoker: ServiceInvokerComponent, private _apiUrls: ApiUrls, private _router: Router) { }
+  profileIdForEdit = 0;
+  profileObjForEdit: any = {};
+
+
+  constructor(private _serviceInvoker: ServiceInvokerComponent, private _apiUrls: ApiUrls, private _router: Router, private _dataService: DataSharingService) { }
 
   ngOnInit() {
     this.getDropDownData();
     this.getModelsData();
+    this._dataService.currentProfileId.subscribe(id => this.profileIdForEdit = id);
+    console.log(this.profileIdForEdit);
+    if (this.profileIdForEdit != 0) {
+      this._dataService.currentProfileObj.subscribe(obj => {
+        // get profile object from data service
+        this.profileObjForEdit = obj;
+        console.log(this.profileObjForEdit);
+        this.selectedModelId = this.profileObjForEdit.ModelID;
+        this.selectedModelName = this.profileObjForEdit.ModelName;
+        this.displaySelectModel();
+        this.selectedFileType = this.profileObjForEdit.FileType;
+        this.selectedAsstYear = this.profileObjForEdit.AssessmentYear;
+        this.selectedBranchCode = this.profileObjForEdit.BranchCode == null ? '' : this.profileObjForEdit.BranchCode == 'all' ? '' : this.profileObjForEdit.BranchCode;
+        this.selectedBusinessCode = this.profileObjForEdit.BusinessCode == null ? '' : this.profileObjForEdit.BusinessCode == 'all' ? '' : this.profileObjForEdit.BusinessCode;
+        this.selectedStateCode = this.profileObjForEdit.StateCode == null ? '' : this.profileObjForEdit.StateCode == 'all' ? '' : this.profileObjForEdit.StateCode;
+        this.profileName = this.profileObjForEdit.ProfileName;
+        console.log((JSON.parse(this.profileObjForEdit.ProfileParametersJson)).Features);
+        this.featuresList = (JSON.parse(this.profileObjForEdit.ProfileParametersJson)).Features;
+        this.featuresByGroups();
+        console.log({ ungrouped: this.featuresList }, { grouped: this.groupedFeaturesList });
+      });
+    } else {
+    }
+  }
+
+  showCountModal(modalCheck: boolean) {
+    if (modalCheck) {
+      this.displayCountModal = "block";
+    } else {
+      this.displayCountModal = "none";
+    }
   }
 
   getDropDownData() {
@@ -49,11 +90,16 @@ export class FeaturesComponent implements OnInit {
       .subscribe(
         res => {
           console.log(res);
-          this.fileTypes = res['file_types'];
-          this.branchCodes = res['branch_codes'];
-          this.businessCodes = res['business_codes'];
-          this.stateCodes = res['state_codes'];
-          this.assessmentYears = res['assessment_years'];
+          this.fileTypes = ['C', 'OG', 'SG', 'D'];
+          // console.log(this.fileTypes);
+          this.branchCodes = JSON.parse(res['branchCode']);
+          // console.log(this.branchCodes);
+          this.businessCodes = JSON.parse(res['businessCode']);
+          // console.log(this.businessCodes);
+          this.stateCodes = JSON.parse(res['stateCode']);
+          // console.log(this.stateCodes);
+          this.assessmentYears = JSON.parse(res['assessmentYear']);
+          // console.log(this.assessmentYears);
         },
         err => {
           console.log(err);
@@ -65,12 +111,12 @@ export class FeaturesComponent implements OnInit {
     this._serviceInvoker.getData(this._apiUrls.getAllModels, { "includeFeatures": "false" })
       .subscribe(
         res => {
-          console.log(res);
-          for (let model of res) {
-            console.log(model);
-            this.models.push({ name: model.ModelName, code: model.ModelID });
-          }
-          console.log(this.models);
+          this.models = res;
+          // for (let model of res) {
+          //   // console.log(model);
+          //   this.models.push({ name: model.ModelName, code: model.ModelID });
+          // }
+          console.log({ models: this.models });
         },
         err => {
           console.log(err);
@@ -78,23 +124,30 @@ export class FeaturesComponent implements OnInit {
       );
   }
 
-  getFeaturesForModel(selectedModel) {
-    console.log(selectedModel);
+  getFeaturesForModel() {
+    console.log(this.selectedModelId);
+    this.setSelectedModelName(this.selectedModelId)
     this.showFeatureDetail = false;
 
-    this._serviceInvoker.getData(this._apiUrls.getFeaturesByModel, { "Id": selectedModel.code })
+    this._serviceInvoker.getData(this._apiUrls.getFeaturesByModel, { "Id": this.selectedModelId })
       .subscribe(
         res => {
+          console.log(res);
           this.featuresList = res;
           this.featuresList.map(feature => feature.Filters = [{ 'Type': '', 'Values': [''] }]);
           this.featuresByGroups();
-          console.log(res);
-          console.log(this.groupedFeaturesList);
+          console.log({ featureList: this.featuresList }, { grouped: this.groupedFeaturesList });
         },
         err => {
           console.log(err);
         }
       );
+  }
+
+  setSelectedModelName(modelId) {
+    let model = this.models.filter(item => item.ModelID == modelId);
+    console.log(model);
+    this.selectedModelName = model[0].ModelName;
   }
 
   featuresByGroups() {
@@ -109,6 +162,7 @@ export class FeaturesComponent implements OnInit {
   }
 
   displaySelectModel() {
+    // this.getModelsData();
     if (this.showSelectModel != true) {
       this.showSelectModel = !this.showSelectModel;
     }
@@ -125,7 +179,7 @@ export class FeaturesComponent implements OnInit {
   }
 
   setFilterValues(selectedFeature) {
-    this.selectedFilter = selectedFeature.Filters[0].Type;
+    this.selectedFilter = selectedFeature.Filters[0].Type == null ? '' : selectedFeature.Filters[0].Type;
     this.valueOne = selectedFeature.Filters[0].Values[0];
     this.valueTwo = selectedFeature.Filters[0].Values[1];
     console.log(this.featuresList);
@@ -171,28 +225,84 @@ export class FeaturesComponent implements OnInit {
   }
 
   createProfile() {
+    if (this.profileIdForEdit != 0) {
+      const obj = {
+        ProfileID: this.profileIdForEdit,
+        ProfileName: this.profileName,
+        ModelID: this.selectedModelId,
+        ModelName: this.selectedModelName,
+        UserID: 25,
+        Year: this.selectedAsstYear,
+        User: "Administrator", //TODO: get from local storage
+        FileType: this.selectedFileType,
+        BranchCode: this.selectedBranchCode ? '' : 'all',
+        Saved: false,
+        StateCode: this.selectedStateCode ? '' : 'all',
+        BusinessCode: this.selectedBusinessCode ? '' : 'all',
+        Features: this.featuresList
+      };
 
-    const obj = {
-      ProfileName: this.profileName,
-      ModelID: this.selectedModel.code,
-      ModelName: this.selectedModel.name,
-      UserID: 25,
-      Year: this.selectedAsstYear,
-      User: "Administrator", //TODO: get from local storage
-      FileType: this.selectedFileType,
-      BranchCode: this.selectedBranchCode,
-      Saved: false,
-      StateCode: this.selectedStateCode,
-      BusinessCode: this.selectedBusinessCode,
-      Features: this.featuresList
-    };
-    //console.log(JSON.stringify(obj));
-    console.log(obj);
-    this.postProfileData(obj);
+      console.log({ EditProfileObject: obj });
+      this.getQueryCount(obj, true);
+
+    } else {
+      const obj = {
+        ProfileName: this.profileName,
+        ModelID: this.selectedModelId,
+        ModelName: this.selectedModelName,
+        UserID: 25,
+        Year: this.selectedAsstYear,
+        User: "Administrator", //TODO: get from local storage
+        FileType: this.selectedFileType,
+        BranchCode: this.selectedBranchCode ? '' : 'all',
+        Saved: false,
+        StateCode: this.selectedStateCode ? '' : 'all',
+        BusinessCode: this.selectedBusinessCode ? '' : 'all',
+        Features: this.featuresList
+      };
+
+      console.log({ CreateProfileObject: obj });
+      this.getQueryCount(obj, false);
+    }
+  }
+
+  getQueryCount(obj, isEdit: boolean) {
+    this._serviceInvoker.getData(this._apiUrls.getQueryCount, { "Profile": obj })
+      .subscribe(
+        res => {
+          console.log(res);
+          if (res.flag == false) {
+            this.countMessage = res.message;
+            this.showCountModal(true);
+          } else {
+            if (isEdit) {
+              console.log("edit profile");
+              // this.postEditProfileData(obj)
+            } else {
+              console.log("create profile");
+              // this.postProfileData(obj);
+            }
+          }
+        },
+        err => console.log(err)
+      );
   }
 
   postProfileData(obj) {
     this._serviceInvoker.getData(this._apiUrls.createProfile, { "Profile": obj })
+      .subscribe(
+        res => {
+          console.log(res.ProfileID);
+          if (res.ProfileID) {
+            this.navToProfiles("slow");
+          }
+        },
+        err => console.log(err)
+      );
+  }
+
+  postEditProfileData(obj) {
+    this._serviceInvoker.getData(this._apiUrls.editProfile, { "Profile": obj })
       .subscribe(
         res => {
           console.log(res.ProfileID);

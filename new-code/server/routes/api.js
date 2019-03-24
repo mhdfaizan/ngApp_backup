@@ -5,9 +5,12 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 
 const dropdowns = require('../models/dropdowns.json');
+const dropdowns_new = require('../models/dropdowns_new.json');
 const results = require('../models/results_new.json');
 const profiles = require('../models/profiles.json');
 const models = require('../models/models.json');
+const profile = require('../models/profile.json');
+const report_card = require('../models/report_card.json');
 
 
 
@@ -40,12 +43,14 @@ const verifytoken = (req, res, next) => {
 
 //JSON FILE BASED SERVICES
 router.post('/dropdowns', (req, res) => {
-    res.send(dropdowns);
+    res.send(dropdowns_new);
 });
 
 router.post('/results', (req, res) => {
     const _profileId = req.body.profileId;
-    console.log(_profileId);
+    const _limit = req.body.limit;
+    const _offset = req.body.offset;
+    console.log(_profileId, _limit, _offset );
     res.send(results);
 });
 
@@ -59,6 +64,40 @@ router.post('/getallmodels', (req, res) => {
 
 router.post('/getfeaturesbymodelid_new', (req, res) => {
     res.send(models);
+});
+
+router.post('/GetODSQueryCount', (req, res) => {
+    const profileObj = req.body;
+    console.log(profileObj);
+    // const obj = {
+    //     message: 'Insufficient records for model to run successfully! Please select different your filters.',
+    //     flag: false
+    // }
+    const obj = {
+        message: 'Success',
+        flag: true
+    }
+    res.send(obj);
+});
+
+router.post('/GetProfileById', (req, res) => {
+    const profileId = req.body.id;
+    console.log(profileId);
+    res.send(profile);
+});
+
+router.post('/createprofile', (req, res) => {
+    let profile = req.body;
+    console.log(profile);
+    profile['ProfileID'] = "2";
+    res.status(200).send(profile);
+});
+
+router.post('/getreportcarddata', (req, res) => {
+    let profileId = req.body.Profile_Id;
+    let itRefNo = req.body.It_ref_Nos;
+    console.log({profileId, itRefNo});
+    res.status(200).send(report_card);
 });
 
 

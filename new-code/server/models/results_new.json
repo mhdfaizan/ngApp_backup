@@ -2,7 +2,7 @@
   "Transposed": [
     {
       "taxpayer": "1",
-      "assessment_year": "2018",
+      "assessment_year": "2018.0",
       "a_val": "1",
       "a_score": "4",
       "a_rank": "1",
@@ -12,7 +12,7 @@
     },
     {
       "taxpayer": "2",
-      "assessment_year": "2018",
+      "assessment_year": "2018.02",
       "a_val": "3",
       "a_score": "2",
       "a_rank": "3",

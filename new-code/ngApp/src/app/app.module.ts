@@ -18,6 +18,7 @@ import { ResultsComponent } from './results/results.component';
 import { ServiceInvokerComponent } from './service-invoker/service-invoker.component';
 import { ApiUrls } from './api-urls';
 import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
+import { DataSharingService } from './data-sharing.service';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.compo
   ],
   providers: [
     ServiceInvokerComponent,
-    ApiUrls
+    ApiUrls,
+    DataSharingService
   ],
   bootstrap: [AppComponent]
 })

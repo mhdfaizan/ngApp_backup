@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import { ServiceInvokerComponent } from '../service-invoker/service-invoker.component';
 import { ApiUrls } from '../api-urls';
+import { DataSharingService } from '../data-sharing.service';
 
 @Component({
   selector: 'app-results',
@@ -18,44 +19,79 @@ export class ResultsComponent implements OnInit {
   statistics = []; // ratio summary data from results service
   filterFields: any[]; // columns names extracted from selected columns to be used for table filtering  
   statisticsHeaders = []; // headers extracted from statistics object for summary table
-  profileId = '1';
+  profileId = "";
+  profileObject = {};
+  resultsAccumalator = [];
+  resultsCheck: boolean = true;
+  selectedRow: any = {};
+  reportCardData = [];
+  reportCardDataHeaders = [];
 
   cars: any = [];
   cols: any = [];
 
-
+  count = 3;
+  limit = 100;
+  offset = 1;
 
   nodeSelect(event) {
     console.log(this.selectedColumns);
     this.setSelectedColumnsAndFilterFields();
   }
 
-  constructor(private _serviceInvoker: ServiceInvokerComponent, private _apiUrls: ApiUrls) { }
+  constructor(private _serviceInvoker: ServiceInvokerComponent, private _apiUrls: ApiUrls, private _dataService: DataSharingService) { }
 
   ngOnInit() {
-    this.getResults();
+    this._dataService.currentProfileObj.subscribe(obj => this.profileObject = obj);
+    console.log(this.profileObject);
+    this._dataService.currentProfileId.subscribe(id => this.profileId = id.toString());
+    console.log(this.profileId);
+    // this.getResults();
+    this.getAllResults();
   }
 
-  getResults() {
-    this._serviceInvoker.getData(this._apiUrls.getProfileResults, { 'profileId': this.profileId })
+  getAllResults() {
+    this._serviceInvoker.getData(this._apiUrls.getProfileResults, { 'profileId': this.profileId, 'limit': this.limit, 'offset': this.offset })
       .subscribe(
         res => {
           console.log(res);
-          //changing year dataype from decimal to number
-          this.resultSet = res["Transposed"].map(item => {
-            item.assessment_year = parseInt(item.assessment_year);
-            return item;
-          }); // REMOVE THIS HARDCODED COLUMN AND HANDLE IN SERVICE BACKEND
-          this.cars = this.resultSet;
-          console.log(this.cars);
-          this.generateTree(this.resultSet);
-          this.selectedColumns = [...this.treeData[0].children, ...this.treeData[1].children, ...this.treeData[2].children]; // creating array for pre-selection of columns 
-          this.setSelectedColumnsAndFilterFields();
-          this.statistics = res["Statistics"];
-          this.statisticsHeaders = Object.keys(this.statistics[0]);
-          // console.log(this.statisticsHeaders);
-        }
+          // if (res["Transposed"].length > 0 && this.count > 0) {
+          if (this.count > 0) { // INSERT RES CHECK WHEN ACTUAL SERVICE IS USED
+            this.count -= 1;
+            this.resultsAccumalator.push(...res["Transposed"]);
+            console.log(this.resultsAccumalator);
+            this.limit += 100;
+            this.offset += 100;
+            this.getAllResults();
+          } else {
+            this.setStatistics(res);
+            console.log(this.resultsAccumalator); 
+            this.changeDecimalToNumber(this.resultsAccumalator);
+            this.cars = this.resultSet;
+            console.log(this.cars);
+            this.generateTree(this.resultSet);
+            this.preselectColumns();
+            this.setSelectedColumnsAndFilterFields();
+          }
+        },
+        err => console.log(err)
       );
+  }
+
+  setStatistics(response) {
+    this.statistics = response["Statistics"];
+    this.statisticsHeaders = Object.keys(this.statistics[0]);
+  }
+
+  changeDecimalToNumber(resTransposed) {
+    this.resultSet = resTransposed.map(item => {
+      item.assessment_year = parseInt(item.assessment_year);
+      return item;
+    });
+  }
+
+  preselectColumns() {
+    this.selectedColumns = [...this.treeData[0].children, ...this.treeData[1].children, ...this.treeData[2].children]; // creating array for pre-selection of columns 
   }
 
   generateTree(res) {
@@ -110,75 +146,16 @@ export class ResultsComponent implements OnInit {
 
   showReportCard(row) {
     console.log(row);
+    this.selectedRow = row;
+    this._serviceInvoker.getData(this._apiUrls.getReportCard, { 'Profile_Id': this.profileId, 'It_ref_Nos': row.taxpayer })
+      .subscribe(
+        res => {
+          console.log(res);
+          this.reportCardData = res;
+          this.reportCardDataHeaders = Object.keys(this.reportCardData[0]);
+        },
+        err => console.log(err)
+      );
   }
-
-  printRow(row) {
-    console.log(row);
-  }
-
-  // setValue() {
-  //   this.files =
-  //     [
-  //       {
-  //         "label": "Documents",
-  //         "data": "Documents Folder",
-  //         "expandedIcon": "fa fa-folder-open",
-  //         "collapsedIcon": "fa fa-folder",
-  //         "children": [{
-  //           "label": "Work",
-  //           "data": "Work Folder",
-  //           "expandedIcon": "fa fa-folder-open",
-  //           "collapsedIcon": "fa fa-folder"
-  //         },
-  //         {
-  //           "label": "Home",
-  //           "data": "Home Folder",
-  //           "expandedIcon": "fa fa-folder-open",
-  //           "collapsedIcon": "fa fa-folder"
-  //         },
-  //         {
-  //           "label": "Invoices.txt",
-  //           "icon": "fa fa-file-word-o",
-  //           "data": "Invoices for this month"
-  //         },
-  //         {
-  //           "label": "Expenses.doc",
-  //           "icon": "fa fa-file-word-o",
-  //           "data": "Expenses Document"
-  //         },
-  //         {
-  //           "label": "Resume.doc",
-  //           "icon": "fa fa-file-word-o",
-  //           "data": "Resume Document"
-  //         }]
-  //       },
-  //       {
-  //         "label": "Pictures",
-  //         "data": "Pictures Folder",
-  //         "expandedIcon": "fa fa-folder-open",
-  //         "collapsedIcon": "fa fa-folder",
-  //         "children": [
-  //           { "label": "barcelona.jpg", "icon": "fa fa-file-image-o", "data": "Barcelona Photo" },
-  //           { "label": "logo.jpg", "icon": "fa fa-file-image-o", "data": "PrimeFaces Logo" },
-  //           { "label": "primeui.png", "icon": "fa fa-file-image-o", "data": "PrimeUI Logo" }]
-  //       },
-  //       {
-  //         "label": "Movies",
-  //         "data": "Movies Folder",
-  //         "expandedIcon": "fa fa-folder-open",
-  //         "collapsedIcon": "fa fa-folder",
-  //         "children": [{
-  //           "label": "Al Pacino",
-  //           "data": "Pacino Movies",
-  //           // "children": [{ "label": "Scarface", "icon": "fa fa-file-video-o", "data": "Scarface Movie" }, { "label": "Serpico", "icon": "fa fa-file-video-o", "data": "Serpico Movie" }]
-  //         },
-  //         {
-  //           "label": "Robert De Niro",
-  //           "data": "De Niro Movies",
-  //           // "children": [{ "label": "Goodfellas", "icon": "fa fa-file-video-o", "data": "Goodfellas Movie" }, { "label": "Untouchables", "icon": "fa fa-file-video-o", "data": "Untouchables Movie" }]
-  //         }]
-  //       }
-  //     ];
-  // }
 
 }

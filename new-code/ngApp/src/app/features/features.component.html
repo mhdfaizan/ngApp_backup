@@ -2,7 +2,7 @@
   <div class="col-2 pl-3 pt-3 border-right">
     <div class="border-bottom">
       <div class="mb-3">
-        <select class="custom-select custom-select-sm" [(ngModel)]="selectedFileType" required>
+        <select class="custom-select custom-select-sm" [(ngModel)]="selectedFileType">
           <option value="">Select File Type</option>
           <option *ngFor="let fileType of fileTypes" [value]="fileType">
             {{fileType}}
@@ -10,55 +10,59 @@
         </select>
       </div>
       <div class="mb-3">
-        <select class="custom-select custom-select-sm" [(ngModel)]="selectedAsstYear" required>
+        <select class="custom-select custom-select-sm" [(ngModel)]="selectedAsstYear">
           <option value="">Select Assessment Year</option>
-          <option *ngFor="let assessmentYear of assessmentYears" [value]="assessmentYear">
-            {{assessmentYear}}
+          <option *ngFor="let assessmentYear of assessmentYears" [value]="assessmentYear.assessment_year">
+            {{assessmentYear.assessment_year}}
           </option>
         </select>
       </div>
       <div class="mb-3">
         <select class="custom-select custom-select-sm" [(ngModel)]="selectedBranchCode">
           <option value="">Branch Code (All)</option>
-          <option *ngFor="let branchCode of branchCodes" [value]="branchCode">
-            {{branchCode}}
+          <option *ngFor="let branchCode of branchCodes" [value]="branchCode.branch_code">
+            {{branchCode.branch_code}} - {{branchCode.branch_name}}
           </option>
         </select>
       </div>
       <div class="mb-3">
         <select class="custom-select custom-select-sm" [(ngModel)]="selectedBusinessCode">
           <option value="">Business Code (All)</option>
-          <option *ngFor="let businessCode of businessCodes" [value]="businessCode">
-            {{businessCode}}
+          <option *ngFor="let businessCode of businessCodes" [value]="businessCode.business_code">
+            {{businessCode.business_code}} - {{businessCode.business_key}}
           </option>
         </select>
       </div>
       <div class="mb-3">
         <select class="custom-select custom-select-sm" [(ngModel)]="selectedStateCode">
           <option value="">State Code (All)</option>
-          <option *ngFor="let stateCode of stateCodes" [value]="stateCode">
-            {{stateCode}}
+          <option *ngFor="let stateCode of stateCodes" [value]="stateCode.state_cd">
+            {{stateCode.state_cd}} - {{stateCode.state}}
           </option>
         </select>
       </div>
-      <div class="text-right pb-3">
-        <button type="button" class="btn btn-info btn-sm btn-block" (click)="displaySelectModel()"><i class="fa fa-search">&nbsp;&nbsp;</i>Get
+      <div class="text-right pb-2">
+        <button type="button" class="btn btn-info btn-sm btn-block" (click)="displaySelectModel()"><i
+            class="fa fa-search">&nbsp;&nbsp;</i>Get
           Models</button>
       </div>
     </div>
     <div *ngIf="showSelectModel" class="pt-2 border-top">
-      <!-- <div class="feature-info-font text-center" style="font-weight: 600">
-        Models
-      </div> -->
-      <div *ngIf="selectedModel" class="selected-model-font text-center" style="font-weight: 600">
+      <div *ngIf="selectedModelId" class="selected-model-font text-center" style="font-weight: 600">
         Model :
         <span class="text-primary">
-          {{selectedModel.name}}
+          {{selectedModelName}}
         </span>
       </div>
       <div class="mt-2 overflow-auto model-selection-wrapper">
-        <p-listbox [style]="{'width':'100%', 'font-size': '90%'}" [options]="models" [(ngModel)]="selectedModel"
-          optionLabel="name" filter="filter" (onChange)="getFeaturesForModel(selectedModel)"></p-listbox>
+        <select class="custom-select model-select-font" size="8" [(ngModel)]="selectedModelId" (change)="getFeaturesForModel()">
+          <option class="mb-1 mt-1" *ngFor="let model of models" [value]="model.ModelID">
+            {{model.ModelName}}
+          </option>
+        </select>
+
+        <!-- <p-listbox [style]="{'width':'100%', 'font-size': '90%'}" [options]="models" [(ngModel)]="selectedModel"
+          optionLabel="name" dataKey="code" filter="filter" (onChange)="getFeaturesForModel(selectedModel)"></p-listbox> -->
       </div>
     </div>
   </div>
@@ -69,17 +73,19 @@
           <div class="card">
             <h6 class="card-header text-center">{{item.name}}</h6>
             <div class="card-body">
-              <div class="box card cursor-pointer border-info" (click)="showFeatureFilters(feature)" *ngFor="let feature of item.values">
+              <div class="box card cursor-pointer border-info" (click)="showFeatureFilters(feature)"
+                *ngFor="let feature of item.values">
                 <div class="card-text border-bottom">
                   <span>
                     {{feature.FeatureName}}
+                    <span *ngIf="feature.Filters[0].Type != '' && feature.Filters[0].Type != null"
+                      class="badge badge-success feature-info-font">F</span>
                   </span>
                   <br />
                 </div>
                 <div>
                   <span class="feature-info-font">
                     {{feature.FeatureDescription}}
-                    <span *ngIf="feature.Filters[0].Type != ''" class="badge badge-success">F</span>
                   </span>
                 </div>
                 <!-- FOR FEATURE METADATA (ALPHA, BASE, ETC.) -->
@@ -103,14 +109,22 @@
   </div>
   <div class="col-3 pt-3 border-left feature-info-font">
     <div class="mb-3">
-      <input [(ngModel)]="profileName" placeholder="Profile Name" type="text" class="form-control form-control-sm rounded-1">
+      <input [(ngModel)]="profileName" placeholder="Profile Name" type="text"
+        class="form-control form-control-sm rounded-1">
     </div>
-    <div class="text-center border-bottom pb-3">
-      <button type="button" [disabled]="!(profileName != '')" (click)="createProfile()" class="btn btn-success btn-sm btn-block"><i
+    <div class="text-center border-bottom pb-2">
+      <button
+        *ngIf="((selectedFileType != '') && (selectedAsstYear != '') && (selectedModelId) && (profileName.toString().trim().length != 0))"
+        type="button" (click)="createProfile()" class="btn btn-success btn-sm btn-block"><i
           class="fa fa-cogs">&nbsp;&nbsp;</i>Run
         Model</button>
+      <button
+        *ngIf="((selectedFileType == '') || (selectedAsstYear == '') || !(selectedModelId) || (profileName.toString().trim().length == 0))"
+        type="button" data-toggle="modal" data-target="#fieldCheckModal" data-backdrop="static" data-keyboard="false"
+        class="btn btn-success btn-sm btn-block">Run
+        Model&nbsp;&nbsp;<i class="fa fa-cogs"></i></button>
     </div>
-    <div *ngIf="showFeatureDetail" class="border-top pt-3 feature-info-wrapper overflow-auto">
+    <div *ngIf="showFeatureDetail" class="border-top pt-2 feature-info-wrapper overflow-auto">
       <table class="table table-striped table-bordered">
         <tr>
           <th scope="row">ID</th>
@@ -151,22 +165,70 @@
         <tr>
           <th scope="row">Filter Value</th>
           <td class="input-group input-group-sm">
-            <input type="number" class="form-control" placeholder="Value One" [(ngModel)]="valueOne" [disabled]="selectedFilter == '' || selectedFilter == 'IS NULL' || selectedFilter == 'IS NOT NULL'">
+            <input type="number" class="form-control" placeholder="Value One" [(ngModel)]="valueOne"
+              [disabled]="selectedFilter == '' || selectedFilter == 'IS NULL' || selectedFilter == 'IS NOT NULL'">
           </td>
         </tr>
         <tr>
           <th scope="row">Filter Value</th>
           <td class="input-group input-group-sm">
-            <input type="number" class="form-control" placeholder="Value Two" [(ngModel)]="valueTwo" [disabled]="selectedFilter != 'Between'">
+            <input type="number" class="form-control" placeholder="Value Two" [(ngModel)]="valueTwo"
+              [disabled]="selectedFilter != 'Between'">
           </td>
         </tr>
         <tr class="text-center">
           <td colspan="2">
-            <button type="button" [disabled]="checkDisable()" class="btn btn-info btn-sm btn-block" (click)="saveFilter(featureForDetail.FeatureID)"><i
-                class="fa fa-filter">&nbsp;&nbsp;</i>Save Filter</button>
+            <button type="button" [disabled]="checkDisable()" class="btn btn-info btn-sm btn-block"
+              (click)="saveFilter(featureForDetail.FeatureID)"><i class="fa fa-filter">&nbsp;&nbsp;</i>Save
+              Filter</button>
           </td>
         </tr>
       </table>
+    </div>
+  </div>
+</div>
+<div class="modal fade" tabindex="-1" id="fieldCheckModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-danger">Warning!</h5>
+        <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body field-check-modal-font">
+        <p>Please enter data for the following fields:</p>
+        <ul>
+          <li *ngIf="selectedFileType == ''">File Type</li>
+          <li *ngIf="selectedAsstYear == ''">Assesment Year</li>
+          <li *ngIf="!selectedModelId">Model</li>
+          <li *ngIf="profileName.toString().trim().length == 0">Profile Name</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="queryCountModal" [ngStyle]="{'display':displayCountModal}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-warning">Attention!</h5>
+        <button type="button" class="close text-warning" (click)="showCountModal(false)" data-dismiss="modal"
+          aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body field-check-modal-font">
+        <p>{{countMessage}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-warning btn-sm" (click)="showCountModal(false)"
+          data-dismiss="modal">Close</button>
+      </div>
     </div>
   </div>
 </div>

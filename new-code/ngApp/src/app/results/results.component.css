@@ -6,6 +6,9 @@
 /* .result-tree-wrapper {
   max-height: 200px;
 } */
+.profile-details-font{
+  font-size: 80%;
+}
 
 .result-tree-wrapper {
   max-height: 400px;

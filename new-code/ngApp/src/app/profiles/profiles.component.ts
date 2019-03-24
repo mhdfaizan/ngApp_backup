@@ -4,6 +4,7 @@ import { ApiUrls } from '../api-urls';
 import { interval } from "rxjs/internal/observable/interval";
 import { startWith, switchMap, isEmpty } from "rxjs/operators";
 import { Router } from '@angular/router';
+import { DataSharingService } from '../data-sharing.service';
 
 @Component({
   selector: 'app-profiles',
@@ -26,12 +27,12 @@ export class ProfilesComponent implements OnInit {
   profilesInQueue = []; // filtered profiles having status other than 'Done'
 
   selectedFileType = "";
-  selectedBranchCode = "";
   selectedAsstYear = "";
+  selectedBranchCode = "";
 
   profileStatusCheck; // interval variable to check profile status by service polling
 
-  constructor(private _serviceInvoker: ServiceInvokerComponent, private _apiUrls: ApiUrls, private _router: Router) { }
+  constructor(private _serviceInvoker: ServiceInvokerComponent, private _apiUrls: ApiUrls, private _router: Router, private _dataService: DataSharingService) { }
 
   ngOnInit() {
     this.getDropDownData();
@@ -65,7 +66,7 @@ export class ProfilesComponent implements OnInit {
             console.log(err);
           }
         );
-    }, 10000);
+    }, 15000);
   }
 
   showProfileDetail(profile) {
@@ -81,11 +82,16 @@ export class ProfilesComponent implements OnInit {
       .subscribe(
         res => {
           console.log(res);
-          this.fileTypes = res['file_types'];
-          this.branchCodes = res['branch_codes'];
-          this.businessCodes = res['business_codes'];
-          this.stateCodes = res['state_codes'];
-          this.assessmentYears = res['assessment_years'];
+          this.fileTypes = ['C', 'OG', 'SG', 'D'];
+          // console.log(this.fileTypes);
+          this.branchCodes = JSON.parse(res['branchCode']);
+          // console.log(this.branchCodes);
+          this.businessCodes = JSON.parse(res['businessCode']);
+          // console.log(this.businessCodes);
+          this.stateCodes = JSON.parse(res['stateCode']);
+          // console.log(this.stateCodes);
+          this.assessmentYears = JSON.parse(res['assessmentYear']);
+          // console.log(this.assessmentYears);
         },
         err => {
           console.log(err);
@@ -107,31 +113,69 @@ export class ProfilesComponent implements OnInit {
       );
   }
 
-  // pending branch code filter implementation
   filterProfiles() {
     if (this.selectedFileType == '') {
       if (this.selectedAsstYear == '') {
-        this.profilesViewList = this.profiles;
+        if (this.selectedBranchCode == '') {
+          this.profilesViewList = this.profiles;
+        } else if (this.selectedBranchCode != '') {
+          this.profilesViewList = this.profiles.filter(profile => profile.BranchCode == this.selectedBranchCode);
+        }
       } else if (this.selectedAsstYear != '') {
-        this.profilesViewList = this.profiles.filter(profile => profile.AssessmentYear == this.selectedAsstYear);
-        console.log(this.selectedAsstYear);
-        console.log(this.profilesViewList);
+        if (this.selectedBranchCode == '') {
+          this.profilesViewList = this.profiles.filter(profile => profile.AssessmentYear == this.selectedAsstYear);
+        } else if (this.selectedBranchCode != '') {
+          this.profilesViewList = this.profiles.filter(profile => profile.AssessmentYear == this.selectedAsstYear && profile.BranchCode == this.selectedBranchCode);
+        }
       }
     } else if (this.selectedFileType != '') {
       if (this.selectedAsstYear == '') {
-        this.profilesViewList = this.profiles.filter(profile => profile.FileType == this.selectedFileType);
+        if (this.selectedBranchCode == '') {
+          this.profilesViewList = this.profiles.filter(profile => profile.FileType == this.selectedFileType);
+        } else if (this.selectedBranchCode != '') {
+          this.profilesViewList = this.profiles.filter(profile => profile.FileType == this.selectedFileType && profile.BranchCode == this.selectedBranchCode);
+        }
       } else if (this.selectedAsstYear != '') {
-        this.profilesViewList = this.profiles.filter(profile => profile.FileType == this.selectedFileType && profile.AssessmentYear == this.selectedAsstYear);
+        if (this.selectedBranchCode == '') {
+          this.profilesViewList = this.profiles.filter(profile => profile.FileType == this.selectedFileType && profile.AssessmentYear == this.selectedAsstYear);
+        } else if (this.selectedBranchCode != '') {
+          this.profilesViewList = this.profiles.filter(profile => profile.FileType == this.selectedFileType && profile.AssessmentYear == this.selectedAsstYear && profile.BranchCode == this.selectedBranchCode);
+        }
+
       }
     }
   }
 
   navToFeatures() {
+    this._dataService.changeProfileId(0);
     this._router.navigate(['/features']);
   }
 
+  navToFeaturesWithEdit() {
+    this._dataService.changeProfileId(this.detailProfile.ProfileID);
+    this._serviceInvoker.getData(this._apiUrls.getProfileObject, { 'id': this.detailProfile.ProfileID })
+      .subscribe(
+        res => {
+          console.log(res);
+          this._dataService.changeProfileObj(res);
+          this._router.navigate(['/features']);
+        },
+        err => console.log(err)
+      )
+  }
+
   navToResults() {
+    this._dataService.changeProfileObj(this.detailProfile);
+    this._dataService.changeProfileId(this.detailProfile.ProfileID);
     this._router.navigate(['/results']);
+  }
+
+  saveProfile() {
+    this._serviceInvoker.getData(this._apiUrls.saveProfile, { 'profileId': this.detailProfile.ProfileId })
+      .subscribe(
+        res => console.log(res),
+        err => console.log(err)
+      );
   }
 
   ngOnDestroy() {

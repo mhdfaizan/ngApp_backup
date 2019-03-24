@@ -1,24 +1,57 @@
 <div class="row pb-3">
+  <!-- COLUMN ONE START -->
   <div class="col-2 pl-3 pt-3 border-right">
-    <div class="text-center border-bottom pb-3">
-      <button type="button" data-toggle="modal" data-target="#reportModal" data-backdrop="static"
-      data-keyboard="false" class="btn btn-info btn-sm btn-block"><i class="fa fa-list-alt">&nbsp;&nbsp;</i>Show
+    <!-- SUMMARY BUTTON START -->
+    <div class="text-center border-bottom pb-2">
+      <button type="button" data-toggle="modal" data-target="#summaryModal" data-backdrop="static" data-keyboard="false"
+        class="btn btn-info btn-sm btn-block"><i class="fa fa-list-alt">&nbsp;&nbsp;</i>Show
         Summary</button>
     </div>
-    <div class="border-top pt-3">
+    <!-- SUMMARY BUTTON END -->
+    <!-- TREE START -->
+    <div class="border-top pt-2">
       <p-tree styleClass="result-tree-font" [value]="treeData" selectionMode="checkbox" [(selection)]="selectedColumns"
         (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeSelect($event)">
       </p-tree>
     </div>
+    <!-- TREE END -->
   </div>
+  <!-- COLUMN ONE END -->
+  <!-- COLUMN TWO START -->
   <div *ngIf="cols.length != 0" class="col-10 pt-3 result-page-font overflow-auto border-left ">
+    <!-- PROFILE DETAILS START -->
+    <div class="card row flex-row flex-nowrap mb-2 pl-2" style="font-weight: 600">
+      <div class="col-md-2 text-center">
+        <span class="card-text border-bottom">Profile Name</span>
+        <br>
+        <span class="profile-details-font text-info">{{profileObject.ProfileName}}</span>
+      </div>
+      <div class="col-md-2 text-center">
+        <span class="card-text border-bottom">Model</span>
+        <br>
+        <span class="profile-details-font text-info">{{profileObject.ModelName}}</span>
+      </div>
+      <div class="col-md-2 text-center">
+        <span class="card-text border-bottom">File Type</span>
+        <br>
+        <span class="profile-details-font text-info">{{profileObject.FileType}}</span>
+      </div>
+      <div class="col-md-2 text-center">
+        <span class="card-text border-bottom">Year</span>
+        <br>
+        <span class="profile-details-font text-info">{{profileObject.AssessmentYear}}</span>
+      </div>
+    </div>
+    <!-- PROFILE DETAILS END -->
+    <!-- TABLE START -->
     <p-table #dt [columns]="cols" [value]="cars" [paginator]="true" [rows]="5" [globalFilterFields]="filterFields"
-      styleClass="result-table-settings" [autoLayout]="true" [style]="{'overflow':'auto!important'}" selectionMode="single">
+      styleClass="result-table-settings" [autoLayout]="true" [style]="{'overflow':'auto!important'}"
+      selectionMode="single">
       <ng-template pTemplate="caption">
         <div style="text-align: right">
           <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-          <input type="text" pInputText size="50" placeholder="Global Filter" (input)="dt.filterGlobal($event.target.value, 'contains')"
-            style="width:auto">
+          <input type="text" pInputText size="50" placeholder="Global Filter"
+            (input)="dt.filterGlobal($event.target.value, 'contains')" style="width:auto">
         </div>
       </ng-template>
       <ng-template pTemplate="header">
@@ -31,62 +64,106 @@
       </ng-template>
       <ng-template pTemplate="body" let-car>
         <tr>
-          <td *ngFor="let col of cols" (click)="printRow(car)">
+          <td *ngFor="let col of cols" (click)="showReportCard(car)" data-toggle="modal" data-target="#reportCardModal"
+            data-backdrop="static" data-keyboard="false">
             {{car[col.label]}}
           </td>
         </tr>
       </ng-template>
     </p-table>
+    <!-- TABLE END -->
   </div>
+  <!-- COLUMN TWO END -->
 </div>
 
-<div class="modal fade" id="reportModal">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header bg-info">
-          <h5 class="modal-title">Summary</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+<!-- SUMMARY MODAL START -->
+<div class="modal fade result-page-font" id="summaryModal">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-info">
+        <h6 class="modal-title">Summary</h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <table style="overflow: auto; max-height: 400px;"
+            class="table table-sm table-responsive table-hover table-striped">
+            <thead>
+              <tr class="table-info">
+                <th column="col" scope="col" *ngFor="let col of statisticsHeaders">
+                  {{col}}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let statRow of statistics">
+                <td *ngFor="let col of statisticsHeaders">{{statRow[col]}}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="modal-body">
-          <div>
-            <table style="overflow: auto; max-height: 400px;" class="table-responsive table table-hover">
-              <thead>
-                <tr class="bg-light">
-                  <th column="col" scope="col" *ngFor="let col of statisticsHeaders">
-                    {{col}}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let statRow of statistics" data-toggle="modal">
-                  <td *ngFor="let col of statisticsHeaders">{{statRow[col]}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="modal-footer border-info">
-          <button type="button" class="btn btn-outline-info" data-dismiss="modal">Close</button>
-        </div>
+      </div>
+      <div class="modal-footer border-info">
+        <button type="button" class="btn btn-sm btn-outline-info" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
-<!-- OLD TABLE -->
-<!-- <table datatable [dtOptions]="dtOptions" class="row-border hover table-bordered">
-      <thead>
-        <tr>
-          <th sortable-column="col.label" scope="col.label" *ngFor="let col of displayColumns">
-            {{col.label}}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let resultRow of resultSet" (click)="showReportCard(resultRow)">
-          <td *ngFor="let col of displayColumns">
-            {{resultRow[col.label]}}
-          </td>
-        </tr>
-      </tbody>
-    </table> -->
+</div>
+<!-- SUMMARY MODAL END -->
+
+<!-- REPORT CARD MODAL START -->
+<div class="modal fade result-page-font" id="reportCardModal">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-info">
+        <h6 class="modal-title">Report Card - {{selectedRow.taxpayer}}</h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <table class="table table-sm table-borderless table-striped">
+            <tr>
+              <th scope="row">Profile</th>
+              <td>{{profileObject.ProfileName}}</td>
+            </tr>
+            <tr>
+              <th scope="row">Model</th>
+              <td>{{profileObject.ModelName}}</td>
+            </tr>
+            <tr>
+              <th scope="row">IT Ref No.</th>
+              <td>{{selectedRow.taxpayer}}</td>
+            </tr>
+          </table>
+          <table style="overflow: auto; max-height: 310px;"
+            class="table table-responsive table-sm table-bordered table-hover table-striped">
+            <thead>
+              <tr class="table-info">
+                <th column="col" scope="col" *ngFor="let col of reportCardDataHeaders">
+                  {{col}}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let reportRow of reportCardData" data-toggle="modal">
+                <td *ngFor="let col of reportCardDataHeaders">
+                  <span>
+                    {{reportRow[col]}}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer border-info">
+        <button type="button" class="btn btn-sm btn-outline-info" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- REPORT CARD MODAL END -->

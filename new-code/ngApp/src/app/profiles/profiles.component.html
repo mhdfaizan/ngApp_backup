@@ -1,4 +1,5 @@
 <div class="row pb-3">
+  <!-- COLUMN ONE: PROFILE FILTERS START -->
   <div class="col-2 pl-3 pt-3 border-right">
     <div class="mb-3">
       <select class="custom-select custom-select-sm" [(ngModel)]="selectedFileType">
@@ -9,57 +10,53 @@
       </select>
     </div>
     <div class="mb-3">
-      <select class="custom-select custom-select-sm" [(ngModel)]="selectedBranchCode">
-        <option value="">Branch Code (All)</option>
-        <option *ngFor="let branchCode of branchCodes" [value]="branchCode">
-          {{branchCode}}
-        </option>
-      </select>
-    </div>
-    <!-- <div class="mb-3">
-      <select class="custom-select custom-select-sm">
-        <option value="" selected>Business Code (All)</option>
-        <option *ngFor="let businessCode of businessCodes" [value]="businessCode">
-          {{businessCode}}
-        </option>
-      </select>
-    </div>
-    <div class="mb-3">
-      <select class="custom-select custom-select-sm">
-        <option value="" selected>State Code (All)</option>
-        <option *ngFor="let stateCode of stateCodes" [value]="stateCode">
-          {{stateCode}}
-        </option>
-      </select>
-    </div> -->
-    <div class="mb-3">
       <select class="custom-select custom-select-sm" [(ngModel)]="selectedAsstYear">
         <option value="">Assessment Year (All)</option>
-        <option *ngFor="let assessmentYear of assessmentYears" [value]="assessmentYear">
-          {{assessmentYear}}
+        <option *ngFor="let assessmentYear of assessmentYears" [value]="assessmentYear.assessment_year">
+          {{assessmentYear.assessment_year}}
+        </option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <select class="custom-select custom-select-sm" [(ngModel)]="selectedBranchCode">
+        <option value="">Branch Code (All)</option>
+        <option *ngFor="let branchCode of branchCodes" [value]="branchCode.branch_code">
+          {{branchCode.branch_code}} - {{branchCode.branch_name}}
         </option>
       </select>
     </div>
     <div class="text-right pb-3">
-      <button type="button" class="btn btn-info btn-sm btn-block" (click)="filterProfiles()"><i class="fa fa-search">&nbsp;&nbsp;</i>Search</button>
+      <button type="button" class="btn btn-info btn-sm btn-block" (click)="filterProfiles()"><i
+          class="fa fa-filter">&nbsp;&nbsp;</i>Filter</button>
     </div>
   </div>
+  <!-- COLUMN ONE: PROFILE FILTERS END -->
+  <!-- COLUMN TWO: PROFILE VIEW START -->
   <div class="col-7 pt-3 border-right border-left">
     <div class="profile-wrapper overflow-auto">
-      <div *ngFor="let profile of profilesViewList" [ngClass]="profile.JobStatus != 'Done' ? 'border-warning' : 'border-success'"
-        class="box card cursor-pointer" (click)="showProfileDetail(profile)">{{profile.ProfileName}}</div>
+      <div *ngFor="let profile of profilesViewList"
+        [ngClass]="profile.JobStatus != 'Done' ? 'border-warning' : 'border-success'" class="box card cursor-pointer"
+        (click)="showProfileDetail(profile)">{{profile.ProfileName}}</div>
     </div>
   </div>
+  <!-- COLUMN TWO: PROFILE VIEW END -->
+  <!-- COLUMN THREE: PROFILE DETAILS VIEW START -->
   <div class="col-3 pt-3 border-left profile-info-font">
-    <div class="text-center border-bottom pb-3">
-      <button type="button" (click)="navToFeatures()" class="btn btn-success btn-sm btn-block"><i class="fa fa-plus">&nbsp;&nbsp;</i>Create
+    <!-- CREATE PROFILE BUTTON START -->
+    <div class="text-center border-bottom pb-2">
+      <button type="button" (click)="navToFeatures()" class="btn btn-success btn-sm btn-block"><i
+          class="fa fa-plus">&nbsp;&nbsp;</i>Create
         Profile</button>
     </div>
-    <div *ngIf="showDetail" class="border-top pt-3 profile-info-wrapper overflow-auto">
-      <table class="table table-striped table-bordered">
+    <!-- CREATE PROFILE BUTTON END -->
+    <!-- PROFILE DETAILS START -->
+    <div *ngIf="showDetail" class="border-top pt-2 profile-info-wrapper overflow-auto">
+      <table class="table table-striped table-bordered ">
         <tr>
           <th scope="row">Status</th>
-          <td><span class="badge badge-pill " [ngClass]="detailProfile.JobStatus != 'Done' ? 'badge-warning' : 'badge-success'">{{detailProfile.JobStatus}}</span></td>
+          <td><span class="badge badge-pill "
+              [ngClass]="detailProfile.JobStatus != 'Done' ? 'badge-warning' : 'badge-success'">{{detailProfile.JobStatus}}</span>
+          </td>
         </tr>
         <tr>
           <th scope="row">Profile Name</th>
@@ -67,7 +64,7 @@
         </tr>
         <tr>
           <th scope="row">Created By</th>
-          <td>{{detailProfile.User}} - {{detailProfile.UserID}}</td>
+          <td>{{detailProfile.UserID}} - {{detailProfile.User}} </td>
         </tr>
         <tr>
           <th scope="row">Model Used</th>
@@ -93,22 +90,26 @@
       <table class="table table-striped table-bordered">
         <tr class="text-center">
           <td colspan="2">
-            <button type="button" (click)="navToResults()" [disabled]="detailProfile.JobStatus != 'Done'" class="btn btn-info btn-sm btn-block"><i
-                class="fa fa-table">&nbsp;&nbsp;</i>View
+            <button type="button" (click)="navToResults()" [disabled]="detailProfile.JobStatus != 'Done'"
+              class="btn btn-info btn-sm btn-block"><i class="fa fa-table">&nbsp;&nbsp;</i>View
               Results</button>
           </td>
         </tr>
         <tr class="text-center">
           <td>
-            <button type="button" [disabled]="detailProfile.Saved != false" class="btn btn-info btn-sm btn-block"><i
-                class="fa fa-pencil">&nbsp;&nbsp;</i>Edit Profile</button>
+            <button type="button" (click)="navToFeaturesWithEdit()"
+              [disabled]="detailProfile.Saved != false || detailProfile.JobStatus != 'Done'"
+              class="btn btn-info btn-sm btn-block"><i class="fa fa-pencil">&nbsp;&nbsp;</i>Edit Profile</button>
           </td>
           <td>
-            <button type="button" [disabled]="detailProfile.Saved != false" class="btn btn-success btn-sm btn-block"><i
-                class="fa fa-floppy-o">&nbsp;&nbsp;</i>Save Profile</button>
+            <button type="button" (click)="saveProfile()"
+              [disabled]="detailProfile.Saved != false || detailProfile.JobStatus != 'Done'"
+              class="btn btn-success btn-sm btn-block"><i class="fa fa-floppy-o">&nbsp;&nbsp;</i>Save Profile</button>
           </td>
         </tr>
       </table>
     </div>
+    <!-- PROFILE DETAILS END -->
   </div>
+  <!-- COLUMN THREE: PROFILE DETAILS VIEW END -->
 </div>
